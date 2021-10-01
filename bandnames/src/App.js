@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
 import { BandAdd } from "./components/BandAdd";
@@ -40,6 +40,23 @@ function App() {
     });
   }, [socket]);
 
+  const castVote = (id) => {
+    // console.log("voted", id);
+    socket.emit("voting", id);
+  };
+
+  const deleteBand = (id) => {
+    socket.emit("deleting", id);
+  };
+
+  const changeNameandSave = (id, name) => {
+    socket.emit("changeName", { id, name });
+  };
+
+  const addBandtoList = (name) => {
+    socket.emit("addingBand", { name });
+  };
+
   return (
     <div className="container">
       <div className="alert">
@@ -57,10 +74,15 @@ function App() {
       <hr />
       <div className="row">
         <div className="col-8">
-          <BandList data={bands} />
+          <BandList
+            data={bands}
+            vote={castVote}
+            deleting={deleteBand}
+            changeNameandSave={changeNameandSave}
+          />
         </div>
         <div className="col-4">
-          <BandAdd />
+          <BandAdd addBandtoList={addBandtoList} />
         </div>
       </div>
     </div>
