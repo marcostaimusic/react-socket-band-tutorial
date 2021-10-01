@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-
-export const BandAdd = ({ addBandtoList }) => {
+import useSocket from "../hooks/useSocket";
+export const BandAdd = () => {
   const [value, setValue] = useState("");
+  const socket = useSocket("http://localhost:8080");
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -9,7 +10,7 @@ export const BandAdd = ({ addBandtoList }) => {
     console.log(value);
     if (value.trim().length > 0) {
       setValue(event.target.value);
-      addBandtoList(value);
+      socket.emit("addingBand", { name: value });
       setValue("");
     }
   };
